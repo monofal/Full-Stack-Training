@@ -1,7 +1,7 @@
 import unittest
 import Task1
 
-class MyTestCase(unittest.TestCase):
+class StringManipulation(unittest.TestCase):
     def test_removeAllExceptFirst(self):
         result = Task1.removeAllExceptFirst("TechCity")
         self.assertEqual(result, "Techiy")
