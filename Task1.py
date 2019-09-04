@@ -1,12 +1,15 @@
+import sys
+
+
 def convertDictToString(dict):
-    strOutput = "";
+    strOutput = ""
     for keys, values in dict.items():
-        strOutput += values;
+        strOutput += values
 
-    return strOutput;
+    return strOutput
 
 
-def removeDuplicatesFromString(strInput):
+def removeAllExceptFirst(strInput):
     dicRemoveDuplicates = {}
     for c in strInput:
         if str(c).upper() not in dicRemoveDuplicates:
@@ -39,9 +42,9 @@ def removeDuplicatesFromString(strInput):
 
 
 def removeFirstOccurrence(strInput):
-    slowIndex = 0;
-    fastIndex = 1;
-    count = len(strInput);
+    slowIndex = 0
+    fastIndex = 1
+    count = len(strInput)
     lstDeletedCharacters = list()
 
     while slowIndex < count:
@@ -50,17 +53,26 @@ def removeFirstOccurrence(strInput):
             lstDeletedCharacters.append(strInput[slowIndex])
             strInput = strInput[0:slowIndex] + '*' + strInput[slowIndex + 1:]
 
-        fastIndex += 1;
+        fastIndex += 1
 
         if fastIndex >= count:
-            slowIndex += 1;
-            fastIndex = 0;
+            slowIndex += 1
+            fastIndex = 0
 
-    strInput = strInput.replace("*", "");
+    strInput = strInput.replace("*", "")
 
     return strInput
 
 
-inputString = "TechCity"
-print(removeDuplicatesFromString(inputString))
-print(removeFirstOccurrence(inputString))
+def main(argv):
+    try:
+        strRemExceptFirst = argv[1]
+        strRemFirstOcc = argv[2]
+        print("Characters removed : ", removeAllExceptFirst(strRemExceptFirst))
+        print("First Occurrence removed : ", removeFirstOccurrence(strRemFirstOcc))
+    except IndexError:
+        print("Error: No valid argument supplied.")
+
+
+if __name__ == "__main__":
+    main(sys.argv)
