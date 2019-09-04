@@ -15,7 +15,7 @@ def removeDuplicatesFromString(strInput):
     return convertDictToString(dicRemoveDuplicates)
 
 
-# This one works file but 2nd method is more memory efficient for larger strings
+# This one works fine but 2nd method is more memory efficient for larger strings
 # def removeFirstOccurrence(strInput):
 #     lstRemoveFirstOccurrence = list()
 #     lstTemp = list()
