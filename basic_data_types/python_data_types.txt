@@ -1,0 +1,6 @@
+Numeric Types : int, float, complex¶
+Text Sequence Types : str
+Binary Sequence Types : bytes, bytearray, memoryview
+Set Types : set , frozenset
+Mapping Types : dict¶
+Sequences : list , tuple
