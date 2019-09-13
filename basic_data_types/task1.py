@@ -1,8 +1,7 @@
 """
 Include tasks for basic data types and  exception handling
 """
-
-import sys
+import argparse
 
 
 def remove_all_except_first(word):
@@ -52,22 +51,22 @@ def remove_first_occurrence(word):
 
     # replace special character from the string to generate output
     word = word.replace("*", "")
-
     return word
 
 
-def main(argv):
+def main():
     """
     Main entry point of program
     """
-    try:
-        no_duplicates = argv[1]
-        remove_first = argv[2]
-        print("Characters removed : ", remove_all_except_first(no_duplicates))
-        print("First Occurrence removed : ", remove_first_occurrence(remove_first))
-    except IndexError:
-        print("Error: No valid argument supplied.")
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("no_duplicates", help="Remove All Except First")
+    parser.add_argument("remove_first", help="Remove First Occurrence")
+
+    args = parser.parse_args()
+    print("Characters removed : ", remove_all_except_first(args.no_duplicates))
+    print("First Occurrence removed : ", remove_first_occurrence(args.remove_first))
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main()
