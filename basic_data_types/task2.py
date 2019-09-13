@@ -2,7 +2,7 @@
 Include tasks for basic data types and  exception handling
 """
 
-import sys
+import argparse
 
 
 def multiply_digits_of_number(number):
@@ -21,18 +21,20 @@ def multiply_digits_of_number(number):
     return product
 
 
-def main(argv):
+def main():
     """
     Main entry point of program
     """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("number", help="Integer Value")
+    args = parser.parse_args()
+
     try:
-        argument = int(argv[1])
-        print(multiply_digits_of_number(argument))
-    except IndexError:
-        print("Error: No argument supplied.")
+        number = int(args.number)
+        print(multiply_digits_of_number(number))
     except ValueError:
-        print("Error: Invalid integer.")
+        print("TypeError: Must be an integer")
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main()
