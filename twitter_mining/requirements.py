@@ -1,0 +1,12 @@
+PySocks	1.7.0	1.7.0
+certifi	2019.9.11	2019.9.11
+chardet	3.0.4	3.0.4
+idna	2.8	2.8
+oauthlib	3.1.0	3.1.0
+pip	19.0.3	19.2.3
+requests	2.22.0	2.22.0
+requests-oauthlib	1.2.0	1.2.0
+setuptools	40.8.0	41.2.0
+six	1.12.0	1.12.0
+tweepy	3.8.0	3.8.0
+urllib3	1.25.3	1.25.3
