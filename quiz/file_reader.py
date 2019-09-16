@@ -42,6 +42,9 @@ class FileReader:
                 if self.validate_format(question) and self.validate_format(key):
                     # Read first character as id and from fourth character onward as text
                     questions.append(Question(question[:1], question[3:], key[3:]))
+                else:
+                    raise Exception('File format is not correct , Expected Integer+Dot+Space+Text')
+
         except FileNotFoundError:
             print("File not found")
 

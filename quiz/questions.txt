@@ -1,7 +1,4 @@
 1. What is 10 times 20?
 2. What is the capital of Pakistan?
 3. If a car weighing 100 kg is moving at a speed of 20 m/s. What is the momentum of the car?
-invalid
-1 invalid
-1.invalid
-invalid. This is invalid question
+
