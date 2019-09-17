@@ -12,7 +12,7 @@ class Response(object):
                  tweets,
                  status_code=None):
         self._status_code = status_code
-        self._tweets = tweets
+        self.__tweets = tweets
 
     @property
     def status_code(self):
@@ -26,15 +26,4 @@ class Response(object):
         """
         :return: tweet object
         """
-        return self._tweets
-
-    def get_tweet_text(self):
-        """
-        Concatenate tweet text in a single string for parsing
-        :return: string , tweets text
-        """
-        tweet_text = ''
-        for tweet in self.tweets:
-            tweet_text += tweet.text
-
-        return tweet_text
+        return self.__tweets
