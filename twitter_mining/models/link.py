@@ -11,13 +11,6 @@ class Link(Tweet):
     def __init__(self,
                  tweet_text,
                  extracted_result=None):
-        super(Link, self).__init__(tweet_text)
-        self.category_name = "LINK"
+        super(Link, self).__init__(tweet_text, "LINK")
         self.extracted_result = extracted_result
 
-    def show_tweet(self):
-        """
-        Print tweet
-        """
-        print("Category : {}".format(self.category_name))
-        print("Tweet : {}".format(self.tweet_text.rstrip()))

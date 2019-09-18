@@ -103,14 +103,9 @@ class TweetParser(object):
             return Plain(tweet.text)
 
     @staticmethod
-    def check_mixed_category(links, hash_tags, mentions):
-        if links and hash_tags and mentions:
-            return True
-        elif links and hash_tags:
-            return True
-        elif links and mentions:
-            return True
-        elif hash_tags and mentions:
-            return True
-        else:
-            return False
+    def check_mixed_category(*categories):
+        """
+        tweet is mixed if it falls in two or more categories
+        """
+        tweet_categories = [category for category in categories if bool(category)]
+        return len(tweet_categories) >= 2

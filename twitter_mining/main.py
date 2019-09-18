@@ -55,6 +55,7 @@ def show_tweets(tweet_categories):
     for tweet in tweet_categories:
         tweet.show_tweet()
 
+
 def main():
     """
     App entry point
