@@ -1,28 +1,62 @@
 """
-Database Handler
+Databse derived class
 """
-import mysql
+import json
 
-from web_scrapper.config import config
+from pip._internal.utils import logging
+
+from web_scrapper.db.db_base_helper import DbBaseHelper
 
 
-class DbHelper:
-    __connection = None;
-    __cursor = None;
+class DbHelper(DbBaseHelper):
+    """
+    Handle database operations
+    """
 
     def __init__(self):
-        __db_config = config['mysql'];
-        self.__connection = mysql.connect(host=__db_config['host'],
-                                          user=__db_config['user'],
-                                          password=__db_config['password'],
-                                          db=__db_config['db'],
-                                          charset='utf8mb4',
-                                          cursorclass=mysql.cursors.DictCursor);
-        self.__cursor = self.__connection.cursor();
+        config = self.get_db_credentials()
+        super(DbHelper, self).__init__(config)
 
-    def query(self, query, params):
-        self.__cursor.execute(query, params)
-        return self.__cursor;
+    @staticmethod
+    def get_db_credentials():
+        try:
+            with open('config.json') as config:
+                mysql_config = json.load(config)
+        except FileNotFoundError:
+            print('Error')
 
-    def close(self):
-        self.__connection.close();
+        return mysql_config
+
+    def bulk_insertion(self, query, params):
+        """
+        Insert multiple jobs into database
+        :param query: mysql query
+        :param params: query parameters
+        :return: cursor
+        """
+        self.open_connection()
+        cursor = self._connection.cursor()
+        try:
+            self._cursor.executemany(query, params)
+            self._connection.commit()
+        except:
+            logging.warn("Failed to insert values {}".format(params))
+        finally:
+            cursor.close()
+
+    def insert_job(self, query, params):
+        """
+        Insert jobs into database
+        :param query: mysql query
+        :param params: query parameters
+        :return: cursor
+        """
+        self.open_connection()
+        cursor = self._connection.cursor()
+        try:
+            self._cursor.execute(query, params)
+            self._connection.commit()
+        except:
+            logging.warn("Failed to insert values {}".format(params))
+        finally:
+            cursor.close()
