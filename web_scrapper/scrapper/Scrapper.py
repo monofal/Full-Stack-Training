@@ -1,12 +1,14 @@
 """
 Scrapper Module
 """
+import logging
 import re
 
 import requests
 from bs4 import BeautifulSoup
 
 from web_scrapper.model.job import Job
+from web_scrapper.utils.log_handler import LogHandler
 
 
 class Scrapper(object):
@@ -21,18 +23,29 @@ class Scrapper(object):
     def scrap_website(self):
         """
         Start extracting required information from website
-        :return:
+        :return: list of job object
         """
-        response = requests.get(self.__url)
-        soup = BeautifulSoup(response.text, 'html.parser')
+        try:
+            response = requests.get(self.__url)
+            soup = BeautifulSoup(response.text, 'html.parser')
 
-        jobs = []
-        # Get by tag and class name
-        for job_link in soup.findAll("a", class_="storylink"):
-            job_text = job_link.findAll(text=True)[0]
-            jobs.append(Job(self.extract_company_name(job_text),
-                            self.extract_job_position(job_text),
-                            self.extract_location(job_text)))
+            jobs = []
+            # Get by tag and class name
+            for job_link in soup.findAll("a", class_="storylink"):
+                job_text = job_link.findAll(text=True)[0]
+
+                company_name = self.extract_company_name(job_text)
+                position = self.extract_job_position(job_text)
+                location = self.extract_location(job_text)
+
+                jobs.append(Job(company_name,
+                                position,
+                                location,
+                                '{}_{}_{}'.format(company_name, position, location)))
+        except:
+            if LogHandler.is_log_enabled:
+                logging.exception("Exception Occurred")
+
         return jobs
 
     @staticmethod
@@ -43,7 +56,8 @@ class Scrapper(object):
         :return: string , company name
         """
         # Split text by hiring,is hiring , is looking for , looking for
-        company_name = re.split("hiring|looking for|is hiring|is looking for", text, flags=re.IGNORECASE)
+        company_name = re.split("hiring|looking for|is hiring|is looking for",
+                                text, flags=re.IGNORECASE)
         # if match found return everything on left side otherwise return empty string
         return company_name[0] if len(company_name) > 1 else ''
 
@@ -66,7 +80,8 @@ class Scrapper(object):
         :return: string , job position
         """
         #
-        split_text = re.split("hiring|hiring a|hiring an", text, flags=re.IGNORECASE)
+        split_text = re.split("hiring|hiring a|hiring an",
+                              text, flags=re.IGNORECASE)
         # if match found split again
         position = re.split(" in ", split_text[1] if len(split_text) > 1 else '', flags=re.IGNORECASE)
         # if match found, return string on the left side

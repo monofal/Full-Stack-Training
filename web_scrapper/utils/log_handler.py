@@ -1,8 +1,8 @@
 """
 Log handler
 """
-import json
-import sys
+import logging
+import os
 import time
 
 
@@ -10,25 +10,38 @@ class LogHandler(object):
     """
     Handle application logging
     """
-    is_log_enabled = False
+    is_log_enabled = None
+    __log_file = None
 
     def __init__(self):
-        self.is_log_enabled = self.check_log_enabled()
-
         time_stamp = time.strftime("%Y%m%d-%H%M%S")
 
-        try:
-            # create a new log file
-            log_file = open('log_' + time_stamp, "w")
-        except:
-            print('Error occurred')
-            sys.exit(0)
+        if LogHandler.is_log_enabled:
+            if not os.path.exists('logs'):
+                os.mkdir('logs')
 
-    @staticmethod
-    def check_log_enabled():
-        try:
-            with open('config.json') as config:
-                mysql_config = json.load(config)
-                return bool(mysql_config["is_log_enables"])
-        except FileNotFoundError:
-            print('Error')
+            logging.basicConfig(filename='logs/log_hackernews_{}.txt'.format(time_stamp),
+                                format='%(asctime)s - %(message)s', level=logging.DEBUG)
+
+    @property
+    def get_log_file(self):
+        """
+        Getter for log file
+        :return: file pointer
+        """
+        return self.__log_file
+
+    @property
+    def is_enabled(self):
+        """
+        Getter for is log enabled
+        :return: bool , return true if log is enabled in config file otherwise false
+        """
+        return self.is_log_enabled
+
+    def close_log_file(self):
+        """
+        Close log file
+        """
+        if not self.is_log_enabled:
+            self.__log_file.close()

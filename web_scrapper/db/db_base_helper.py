@@ -1,7 +1,13 @@
 """
 Database base Handler
 """
+import json
+import logging
+
 import mysql.connector
+
+from web_scrapper.utils.log_handler import LogHandler
+from web_scrapper.utils.utility import Utility
 
 
 class DbBaseHelper(object):
@@ -11,23 +17,27 @@ class DbBaseHelper(object):
     _connection = None
     _cursor = None
 
-    def __init__(self,
-                 config):
-        _db_config = config['mysql']
+    def __init__(self):
+        self._db_config = Utility.get_db_credentials()
 
     def open_connection(self):
+        """
+        Open database connection
+        """
         try:
             self._connection = mysql.connector.connect(host=self._db_config['host'],
                                                        user=self._db_config['user'],
-                                                       password=self.db_config['password'],
+                                                       password=self._db_config['password'],
                                                        db=self._db_config['db'])
             if self._connection.is_connected():
                 self._cursor = self._connection.cursor()
         except:
-            print('Error')
+            if LogHandler.is_log_enabled:
+                logging.exception("Unable to open database connection")
 
     def close_connection(self):
         """
         Close database connection
         """
-        self._connection.close()
+        if self._connection.is_connected():
+            self._connection.close()

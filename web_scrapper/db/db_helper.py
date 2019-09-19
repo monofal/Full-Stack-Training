@@ -2,30 +2,17 @@
 Databse derived class
 """
 import json
-
-from pip._internal.utils import logging
+import logging
 
 from web_scrapper.db.db_base_helper import DbBaseHelper
+from web_scrapper.model.job import Job
+from web_scrapper.utils.log_handler import LogHandler
 
 
 class DbHelper(DbBaseHelper):
     """
     Handle database operations
     """
-
-    def __init__(self):
-        config = self.get_db_credentials()
-        super(DbHelper, self).__init__(config)
-
-    @staticmethod
-    def get_db_credentials():
-        try:
-            with open('config.json') as config:
-                mysql_config = json.load(config)
-        except FileNotFoundError:
-            print('Error')
-
-        return mysql_config
 
     def bulk_insertion(self, query, params):
         """
@@ -35,28 +22,34 @@ class DbHelper(DbBaseHelper):
         :return: cursor
         """
         self.open_connection()
-        cursor = self._connection.cursor()
         try:
             self._cursor.executemany(query, params)
             self._connection.commit()
+            if LogHandler.is_log_enabled:
+                logging.info("{} new jobs added".format(len(params)))
         except:
-            logging.warn("Failed to insert values {}".format(params))
+            if LogHandler.is_log_enabled:
+                logging.exception("Unable to insert data into database")
         finally:
-            cursor.close()
+            self.close_connection()
+            self._cursor.close()
 
-    def insert_job(self, query, params):
+    def execute_query(self,
+                      query):
         """
-        Insert jobs into database
+        Get recently added job list
         :param query: mysql query
-        :param params: query parameters
         :return: cursor
         """
         self.open_connection()
-        cursor = self._connection.cursor()
         try:
-            self._cursor.execute(query, params)
-            self._connection.commit()
+            self._cursor.execute(query)
+            records = self._cursor.fetchall()
+
+            return records
         except:
-            logging.warn("Failed to insert values {}".format(params))
+            if LogHandler.is_log_enabled:
+                logging.exception("Unable to fetch records")
         finally:
-            cursor.close()
+            self.close_connection()
+            self._cursor.close()

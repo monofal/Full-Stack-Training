@@ -4,14 +4,29 @@ Job model
 
 
 class Job(object):
+    """
+    Hold job information
+    """
 
     def __init__(self,
                  company_name,
                  position,
-                 location):
+                 location,
+                 unique_id,
+                 job_id=None):
+        self.__job_id = job_id
         self.__company_name = company_name
         self.__position = position
         self.__location = location
+        self.__unique_id = unique_id
+
+    @property
+    def job_id(self):
+        """
+        Get id
+        :return: integer , id
+        """
+        return self.__job_id
 
     @property
     def company_name(self):
@@ -36,3 +51,11 @@ class Job(object):
         :return: string , location
         """
         return self.__location
+
+    @property
+    def unique_id(self):
+        """
+        Get unique id
+        :return: string , unique id
+        """
+        return self.__unique_id
