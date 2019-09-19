@@ -30,7 +30,7 @@ class Utility(object):
         try:
             with open('config.json') as config:
                 mysql_config = json.load(config)
-                return mysql_config["log"]["is_log_enables"] == "True"
+                return mysql_config["log"]["is_log_enabled"] == "True"
         except FileNotFoundError:
             print('Error')
             sys.exit(0)

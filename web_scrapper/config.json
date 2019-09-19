@@ -6,6 +6,6 @@
 		"db": "testdb"
 	},
     "log": {
-        "is_log_enables":"True"
+        "is_log_enabled":"True"
     }
 }
