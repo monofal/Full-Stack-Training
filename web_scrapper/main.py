@@ -87,10 +87,6 @@ def main():
     scrapper = Scrapper(website_url)
     jobs = scrapper.scrap_website()
 
-    # jobs = []
-    # jobs.append(Job('asdf', 'asdf', 'asdf', 'asdf_asdf_asdf'))
-    # jobs.append(Job('1', '2', '3', '1_2_3'))
-
     # get list of jobs that aren't part of our record
     new_jobs = get_new_records(jobs, recent_jobs)
 
