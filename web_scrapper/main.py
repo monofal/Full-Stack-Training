@@ -2,12 +2,15 @@
 Main Module
 """
 import logging
+import time
 
 from web_scrapper.db.db_helper import DbHelper
 from web_scrapper.model.job import Job
 from web_scrapper.scrapper.Scrapper import Scrapper
 from web_scrapper.utils.log_handler import LogHandler
 from web_scrapper.utils.utility import Utility
+
+SCRAP_DELAY_TIME = 15
 
 
 def insert_jobs(new_jobs,
@@ -18,7 +21,7 @@ def insert_jobs(new_jobs,
     :param db_helper: db helper
     """
     params = Utility.get_params(new_jobs)
-    query = 'INSERT INTO Jobs (company_name, location, position, unique_id)' \
+    query = 'INSERT INTO Jobs (company_name, position, location , unique_id)' \
             ' VALUES (%s, %s, %s, %s);'
 
     db_helper.bulk_insertion(query, params)
@@ -75,28 +78,32 @@ def main():
     db_helper = DbHelper()
     LogHandler.is_log_enabled = Utility.get_log_config()
     log_handler = LogHandler()
+    if LogHandler.is_log_enabled:
+        log_handler.create_log_file()
     website_url = 'https://news.ycombinator.com/jobs'
 
-    # Get all jobs added last time the application executed
-    recent_jobs = get_recently_added_jobs(db_helper)
+    while True:
 
-    if LogHandler.is_log_enabled:
-        logging.info("Scrapping started")
+        # Get all jobs added last time the application executed
+        recent_jobs = get_recently_added_jobs(db_helper)
 
-    # start scrapping website
-    scrapper = Scrapper(website_url)
-    jobs = scrapper.scrap_website()
+        if LogHandler.is_log_enabled:
+            logging.info("Scrapping started")
 
-    # get list of jobs that aren't part of our record
-    new_jobs = get_new_records(jobs, recent_jobs)
+        # start scrapping website
+        scrapper = Scrapper(website_url)
+        jobs = scrapper.scrap_website()
 
-    insert_jobs(new_jobs, db_helper)
+        # get list of jobs that aren't part of our record
+        new_jobs = get_new_records(jobs, recent_jobs)
 
-    # close log file
-    log_handler.close_log_file()
+        insert_jobs(new_jobs, db_helper)
 
-    if LogHandler.is_log_enabled:
-        logging.info("Scrapping finished")
+        if LogHandler.is_log_enabled:
+            logging.info("Scrapping finished")
+
+        # delay time in seconds
+        time.sleep(SCRAP_DELAY_TIME)
 
 
 if __name__ == "__main__":
