@@ -21,7 +21,7 @@ def insert_jobs(new_jobs,
     :param db_helper: db helper
     """
     params = Utility.get_params(new_jobs)
-    query = 'INSERT INTO Jobs (company_name, position, location , unique_id)' \
+    query = 'INSERT INTO jobs (company_name, position, location , unique_id)' \
             ' VALUES (%s, %s, %s, %s);'
 
     db_helper.bulk_insertion(query, params)
@@ -34,9 +34,9 @@ def get_recently_added_jobs(db_helper):
     """
     recent_jobs = []
 
-    query = 'SELECT id,company_name,position,location, unique_id, entry_timestamp FROM Jobs' \
+    query = 'SELECT id,company_name,position,location, unique_id, entry_timestamp FROM jobs' \
             ' WHERE entry_timestamp IN (SELECT max(entry_timestamp)' \
-            ' FROM Jobs)'
+            ' FROM jobs)'
     records = db_helper.execute_query(query)
 
     for row in records:

@@ -85,4 +85,4 @@ class Scrapper(object):
         # if match found split again
         position = re.split(" in ", split_text[1] if len(split_text) > 1 else '', flags=re.IGNORECASE)
         # if match found, return string on the left side
-        return position[0] if len(position) > 1 else ''
+        return position[0]
