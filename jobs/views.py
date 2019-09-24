@@ -11,4 +11,4 @@ def job_view(request, *args, **kwargs):
     context = {
         'jobs': jobs
     }
-    return render(request, 'job/jobs.html', context)
+    return render(request, 'jobs.html', context)

@@ -1,0 +1,23 @@
+{% block content %}
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static "jobs/style.css" %}" type="text/css"/>
+
+    <h2>Job Openings</h2>
+
+    <table>
+      <tr>
+        <th>Company</th>
+        <th>Position</th>
+        <th>Location</th>
+      </tr>
+       {% for job in jobs %}
+            <tr>
+                <td>{{job.company_name.strip|capfirst}}</td>
+                <td>{{job.position.strip|capfirst}}</td>
+                <td>{{ job.location.strip|capfirst }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
