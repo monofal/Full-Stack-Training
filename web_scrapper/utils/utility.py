@@ -2,9 +2,13 @@
 Utility module
 """
 import json
+import os
 import sys
 
-from web_scrapper.utils.log_handler import LogHandler
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(BASE_DIR)
+
+from utils.log_handler import LogHandler
 
 
 class Utility(object):
@@ -27,8 +31,8 @@ class Utility(object):
                 job.location,
                 # remove all spaces and store unique id in lower case
                 '{}_{}_{}'.format(job.company_name, job.position, job.location)
-                .replace(' ', '')
-                .lower())
+                    .replace(' ', '')
+                    .lower())
         return params
 
     @staticmethod
@@ -46,12 +50,12 @@ class Utility(object):
                 .lower())
 
     @staticmethod
-    def get_log_config():
+    def get_log_config(config_file_path):
         """
         Get configuration for application logging
         """
         try:
-            with open('config.json') as config:
+            with open(config_file_path) as config:
                 mysql_config = json.load(config)
                 return mysql_config["log"]["is_log_enabled"] == "True"
         except FileNotFoundError:
@@ -59,16 +63,16 @@ class Utility(object):
             sys.exit(0)
 
     @staticmethod
-    def get_db_credentials():
+    def get_db_credentials(config_file_path):
         """
         Get database credentials from file
         :return:
         """
         try:
-            with open('config.json') as config:
+            with open(config_file_path) as config:
                 mysql_config = json.load(config)
         except FileNotFoundError:
-            LogHandler.log('exception','Database configuration file not found')
+            LogHandler.log('exception', 'Database configuration file not found')
             raise Exception("Database configuration file not found")
 
         return mysql_config["mysql"]

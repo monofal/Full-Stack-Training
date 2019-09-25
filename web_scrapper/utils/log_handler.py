@@ -20,7 +20,8 @@ class LogHandler(object):
         """
         return self.is_log_enabled
 
-    def create_log_file(self):
+    def create_log_file(self,
+                        base_dir):
         """
         Setup basic configuration for logging
         :return:
@@ -28,10 +29,10 @@ class LogHandler(object):
         time_stamp = time.strftime("%Y%m%d-%H%M%S")
 
         if LogHandler.is_log_enabled:
-            if not os.path.exists('logs'):
-                os.mkdir('logs')
+            if not os.path.exists(base_dir+'/logs'):
+                os.mkdir(base_dir+'/logs')
 
-            logging.basicConfig(filename='logs/log_hackernews_{}.txt'.format(time_stamp),
+            logging.basicConfig(filename=base_dir+'/logs/log_hackernews_{}.txt'.format(time_stamp),
                                 format='%(asctime)s - %(message)s', level=logging.DEBUG)
 
     @staticmethod

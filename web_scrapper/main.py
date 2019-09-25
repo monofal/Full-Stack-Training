@@ -1,14 +1,18 @@
 """
 Main Module
 """
-
-from web_scrapper.db.db_helper import DbHelper
-from web_scrapper.model.job import Job
-from web_scrapper.scrapper.scrapper import Scrapper
-from web_scrapper.utils.log_handler import LogHandler
-from web_scrapper.utils.utility import Utility
+import os
+import sys
 
 SCRAP_DELAY_TIME = 15
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE = 'config.json'
+sys.path.append(BASE_DIR)
+
+from db.db_helper import DbHelper
+from scrapper.scrapper import Scrapper
+from utils.log_handler import LogHandler
+from utils.utility import Utility
 
 
 def insert_jobs(new_jobs,
@@ -30,12 +34,14 @@ def main():
     """
     App entry point
     """
+    config_file_path = os.path.join(BASE_DIR, CONFIG_FILE)
+
     # Initialization
-    db_helper = DbHelper()
-    LogHandler.is_log_enabled = Utility.get_log_config()
+    db_helper = DbHelper(config_file_path)
+    LogHandler.is_log_enabled = Utility.get_log_config(config_file_path)
     log_handler = LogHandler()
     if LogHandler.is_log_enabled:
-        log_handler.create_log_file()
+        log_handler.create_log_file(BASE_DIR)
 
     website_url = 'https://news.ycombinator.com/jobs'
 
