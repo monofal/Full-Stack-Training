@@ -2,25 +2,48 @@
 Utility module
 """
 import json
-import logging
 import sys
+
+from web_scrapper.utils.log_handler import LogHandler
 
 
 class Utility(object):
     """
     Class containing utility functions
     """
+
     @staticmethod
     def get_params(jobs):
+        """
+        Convert list of job objects into query params
+        :param jobs: list of jobs
+        :return:
+        """
         params = []
         for job in jobs:
-            params.append((
+            params.append(
                 job.company_name,
                 job.position,
                 job.location,
+                # remove all spaces and store unique id in lower case
                 '{}_{}_{}'.format(job.company_name, job.position, job.location)
-            ))
+                .replace(' ', '')
+                .lower())
         return params
+
+    @staticmethod
+    def get_param(job):
+        """
+        Convert job object into tupple
+        :param job: list of jobs
+        :return: tuple
+        """
+        return (job.company_name,
+                job.position,
+                job.location,
+                '{}_{}_{}'.format(job.company_name, job.position, job.location)
+                .replace(' ', '')
+                .lower())
 
     @staticmethod
     def get_log_config():
@@ -45,6 +68,7 @@ class Utility(object):
             with open('config.json') as config:
                 mysql_config = json.load(config)
         except FileNotFoundError:
-            logging.exception("Database configuration file not found")
+            LogHandler.log('exception','Database configuration file not found')
+            raise Exception("Database configuration file not found")
 
         return mysql_config["mysql"]

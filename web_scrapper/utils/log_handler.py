@@ -33,3 +33,14 @@ class LogHandler(object):
 
             logging.basicConfig(filename='logs/log_hackernews_{}.txt'.format(time_stamp),
                                 format='%(asctime)s - %(message)s', level=logging.DEBUG)
+
+    @staticmethod
+    def log(severity,
+            message):
+        """
+        Log message into text file.
+        :param severity: info , error , warning , exception
+        :param message: text to be logged
+        """
+        if LogHandler.is_log_enabled:
+            getattr(logging, severity)(message)

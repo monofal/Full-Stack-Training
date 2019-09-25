@@ -1,8 +1,6 @@
 """
 Database base Handler
 """
-import json
-import logging
 
 import mysql.connector
 
@@ -32,8 +30,7 @@ class DbBaseHelper(object):
             if self._connection.is_connected():
                 self._cursor = self._connection.cursor()
         except:
-            if LogHandler.is_log_enabled:
-                logging.exception("Unable to open database connection")
+            LogHandler.log('exception', 'Unable to open database connection')
 
     def close_connection(self):
         """

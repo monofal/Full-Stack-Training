@@ -1,7 +1,6 @@
 """
 Scrapper Module
 """
-import logging
 import re
 
 import requests
@@ -43,8 +42,7 @@ class Scrapper(object):
                                 location,
                                 '{}_{}_{}'.format(company_name, position, location)))
         except:
-            if LogHandler.is_log_enabled:
-                logging.exception("Exception Occurred")
+            LogHandler.log('exception', 'Exception Occurred')
 
         return jobs
 
