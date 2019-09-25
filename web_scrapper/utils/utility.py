@@ -28,8 +28,8 @@ class Utility(object):
                 job.location,
                 # remove all spaces and store unique id in lower case
                 '{}_{}_{}'.format(job.company_name, job.position, job.location)
-                    .replace(' ', '')
-                    .lower())
+                .replace(' ', '')
+                .lower())
         return params
 
     @staticmethod
