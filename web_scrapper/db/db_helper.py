@@ -1,14 +1,9 @@
 """
 Databse derived class
 """
-import os
-import sys
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-
-from db.db_base_helper import DbBaseHelper
-from utils.log_handler import LogHandler
+from web_scrapper.db.db_base_helper import DbBaseHelper
+from web_scrapper.utils.log_handler import LogHandler
 
 
 class DbHelper(DbBaseHelper):

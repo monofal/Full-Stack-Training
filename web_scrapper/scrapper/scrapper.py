@@ -1,18 +1,13 @@
 """
 Scrapper Module
 """
-import os
 import re
-import sys
 
 import requests
 from bs4 import BeautifulSoup
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-
-from model.job import Job
-from utils.log_handler import LogHandler
+from web_scrapper.model.job import Job
+from web_scrapper.utils.log_handler import LogHandler
 
 
 class Scrapper(object):

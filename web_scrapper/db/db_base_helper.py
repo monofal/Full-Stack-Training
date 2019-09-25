@@ -1,16 +1,11 @@
 """
 Database base Handler
 """
-import os
-import sys
 
 import mysql.connector
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-
-from utils.log_handler import LogHandler
-from utils.utility import Utility
+from web_scrapper.utils.log_handler import LogHandler
+from web_scrapper.utils.utility import Utility
 
 
 class DbBaseHelper(object):

@@ -2,17 +2,15 @@
 Main Module
 """
 import os
-import sys
+
+from web_scrapper.db.db_helper import DbHelper
+from web_scrapper.scrapper.scrapper import Scrapper
+from web_scrapper.utils.log_handler import LogHandler
+from web_scrapper.utils.utility import Utility
 
 SCRAP_DELAY_TIME = 15
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE = 'config.json'
-sys.path.append(BASE_DIR)
-
-from db.db_helper import DbHelper
-from scrapper.scrapper import Scrapper
-from utils.log_handler import LogHandler
-from utils.utility import Utility
 
 
 def insert_jobs(new_jobs,

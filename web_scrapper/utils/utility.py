@@ -5,10 +5,7 @@ import json
 import os
 import sys
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-
-from utils.log_handler import LogHandler
+from web_scrapper.utils.log_handler import LogHandler
 
 
 class Utility(object):
