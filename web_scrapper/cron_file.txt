@@ -1,1 +1,2 @@
+# Execute after every 1 minute
 * * * * * python /home/nofal/PycharmProjects/TestPython/web_scrapper/main.py
