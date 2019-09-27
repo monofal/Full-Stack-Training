@@ -4,9 +4,9 @@ from accounts.views import RegisterEmployeeView, LoginView, LogoutView, activate
 app_name = "accounts"
 
 urlpatterns = [
-    path('employee/register',
+    path('register',
          RegisterEmployeeView.as_view(),
-         name='employee-register'),
+         name='register'),
     path('logout',
          LogoutView.as_view(),
          name='logout'),

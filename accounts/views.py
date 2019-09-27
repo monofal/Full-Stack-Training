@@ -9,7 +9,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.generic import CreateView, FormView, RedirectView
 from django.contrib.sites.shortcuts import get_current_site
 
-from accounts.forms import EmployeeRegistrationForm, UserLoginForm
+from accounts.forms import RegistrationForm, UserLoginForm
 from accounts.models import User
 from accounts.tokens import account_activation_token
 
@@ -20,8 +20,8 @@ class RegisterEmployeeView(CreateView):
     """
     success_url = '/home'
     model = User
-    form_class = EmployeeRegistrationForm
-    template_name = 'accounts/employee/register.html'
+    form_class = RegistrationForm
+    template_name = 'accounts/register.html'
 
     extra_context = {
         'title': 'Register'
@@ -49,7 +49,7 @@ class RegisterEmployeeView(CreateView):
 
             return redirect('accounts:login')
         else:
-            return render(request, 'accounts/employee/register.html', {'form': form})
+            return render(request, 'accounts/register.html', {'form': form})
 
 
 class LoginView(FormView):
@@ -78,12 +78,11 @@ class LogoutView(RedirectView):
     """
     Provides users the ability to logout
     """
-    url = '/login'
+    success_url = '/login'
 
     def get(self, request, *args, **kwargs):
         auth.logout(request)
-        messages.success(request, 'You are now logged out')
-        return super(LogoutView, self).get(request, *args, **kwargs)
+        return HttpResponseRedirect(self.success_url)
 
 
 def activate(request, uidb64, token):

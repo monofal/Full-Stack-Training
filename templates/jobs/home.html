@@ -1,20 +1,74 @@
+{% extends 'base.html' %}
+
 {% block content %}
-    <h2>Job Openings</h2>
 
-    <table>
-      <tr>
-        <th>Company</th>
-        <th>Position</th>
-        <th>Location</th>
-      </tr>
-       {% for job in jobs %}
-            <tr>
-                <td>{{job.company_name.strip|capfirst}}</td>
-                <td>{{job.position.strip|capfirst}}</td>
-                <td>{{ job.location.strip|capfirst }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+    <section class="job-form-section job-form-section--image">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="job-form-box">
+                        <h2 class="heading">Find a <span class="accent">job</span> you will
+                            <span class="accent">love</span>.
+                        </h2>
+                        <form id="job-main-form" method="get"  class="job-main-form"> {# action="{% url 'jobs:searh' %}"#}
+                            <div class="controls">
+                                <div class="row align-items-center">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="company">Position</label>
+                                            <input type="text" id="company" name="company"
+                                                   placeholder="Company name" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="profession">Position</label>
+                                            <input type="text" id="profession" name="position"
+                                                   placeholder="Position you are looking for" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="location">Location</label>
+                                            <input type="text" id="location" name="location"
+                                                   placeholder="Any particular location?" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="submit"
+                                                class="btn btn-outline-white-primary job-main-form__button">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <a href="{% url 'accounts:logout' %}">Logout</a>
+    <div class="col-lg-6 offset-3">
+            <div class="box">
+                <h2>Job Openings</h2>
+                <table class="table">
+                  <tr>
+                    <th scope="row">Company</th>
+                    <th scope="row">Position</th>
+                    <th scope="row">Location</th>
+                      <th scope="row">Apply for this job</th>
+                  </tr>
+                   {% for job in jobs %}
+                        <tr>
+                            <td>{{job.company_name.strip|capfirst}}</td>
+                            <td>{{job.position.strip|capfirst}}</td>
+                            <td>{{ job.location.strip|capfirst }}</td>
+                            <td ><a>Apply</a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+    </div>
+
 {% endblock %}

@@ -7,13 +7,18 @@ from django.contrib.auth.forms import UserCreationForm
 
 from accounts.models import User
 
+ROLE_CHOICES = (
+    ('employee', 'Employee'),
+    ('employer', 'Employer'))
 
-class EmployeeRegistrationForm(UserCreationForm):
+
+class RegistrationForm(UserCreationForm):
     """
     Employee/JobSeeker registration form
     """
+
     def __init__(self, *args, **kwargs):
-        super(EmployeeRegistrationForm, self).__init__(*args, **kwargs)
+        super(RegistrationForm, self).__init__(*args, **kwargs)
         self.fields['password1'].label = "Password"
         self.fields['password2'].label = "Confirm Password"
 
@@ -35,11 +40,16 @@ class EmployeeRegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['email', 'password1', 'password2']
+        fields = ['email', 'password1', 'password2', 'role']
+        error_messages = {
+            'role': {
+                'required': 'Role is required'
+            }
+        }
 
-    def save(self, commit=True):
+    def save(self,
+             commit=True):
         user = super(UserCreationForm, self).save(commit=False)
-        user.role = "employee"
         if commit:
             user.save()
         return user
