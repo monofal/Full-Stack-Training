@@ -1,14 +1,14 @@
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from .models import Jobs
 
 
-# Create your views here.
-def job_view(request, *args, **kwargs):
-    # get 20 records from database
-    jobs = Jobs.objects.all()[:20]
+@login_required(login_url='/login')
+def home_view(request, *args, **kwargs):
+    # get latest 20 records from database
+    jobs = Jobs.objects.all().order_by("-entry_timestamp")[:20]
     context = {
         'jobs': jobs
     }
-    return render(request, 'jobs.html', context)
+    return render(request, 'jobs/home.html', context)

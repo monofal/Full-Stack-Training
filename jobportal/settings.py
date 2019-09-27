@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'jobs',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -78,7 +79,7 @@ WSGI_APPLICATION = 'jobportal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'testdb',
+        'NAME': 'jobportal',
         'USER': 'root',
         'PASSWORD': 'password',
         'HOST': 'localhost'
@@ -123,3 +124,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+AUTH_USER_MODEL = "accounts.user"
+
+# Email verification
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
+EMAIL_PORT = 587

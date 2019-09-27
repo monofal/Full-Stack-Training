@@ -1,8 +1,4 @@
 {% block content %}
-
-    {% load static %}
-    <link rel="stylesheet" href="{% static "jobs/style.css" %}" type="text/css"/>
-
     <h2>Job Openings</h2>
 
     <table>
@@ -20,4 +16,5 @@
         {% endfor %}
     </table>
 
+    <a href="{% url 'accounts:logout' %}">Logout</a>
 {% endblock %}
