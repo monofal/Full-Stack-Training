@@ -131,8 +131,11 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = "accounts.user"
 
 # Email verification
+email_host_password = os.environ.get('EMAIL_HOST_PASSWORD')
+api_key = os.environ.get('API_KEY')
+
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = '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'
+EMAIL_HOST_USER = api_key
+EMAIL_HOST_PASSWORD = email_host_password
 EMAIL_PORT = 587
