@@ -1,9 +1,16 @@
 from django.urls import path
-from jobs.views import home_view
+from jobs.views import HomeView, SearchView, JobDetailsView
 
 app_name = "jobs"
 
 urlpatterns = [
-    path('home',
-         home_view),
+    path('',
+         HomeView.as_view(),
+         name='home'),
+    path('search',
+         SearchView.as_view(),
+         name='search'),
+    path('jobs/<int:id>',
+         JobDetailsView.as_view(),
+         name='jobs-detail'),
 ]

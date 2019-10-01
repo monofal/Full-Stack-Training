@@ -128,14 +128,14 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 AUTH_USER_MODEL = "accounts.user"
 
-# Email verification
-email_host_password = os.environ.get('EMAIL_HOST_PASSWORD')
-api_key = os.environ.get('API_KEY')
-
+# Email verification credentials
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = api_key
-EMAIL_HOST_PASSWORD = email_host_password
+EMAIL_HOST_USER = os.environ.get('API_KEY')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587

@@ -36,7 +36,7 @@
 <header class="header">
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a href="/home" class="navbar-brand">
+            <a href="/" class="navbar-brand">
                 <strong>WANT2WORK</strong>
                 <span class="sr-only">Home</span>
             </a>
@@ -47,7 +47,7 @@
             <div id="navbarSupportedContent" class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
-                        <a href="/home" class="nav-link">Home <span class="sr-only">(current)</span></a>
+                        <a href="/" class="nav-link">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">About Us</a>
@@ -56,9 +56,16 @@
                         <a href="#" class="nav-link">Contact</a>
                     </li>
                     {% if request.user.is_authenticated%}
-                        <li class="nav-item dropdown">
-                            <a class="btn navbar-btn btn-outline-light mb-5 mb-lg-0">{{ request.user.email }}</a>
-                        </li>
+                        {% if request.user.role == 'employee' %}
+                             <li class="nav-item dropdown">
+                                <a href="{% url 'accounts:employee-profile-update' %}" class="btn navbar-btn btn-outline-light mb-5 mb-lg-0">{{ request.user.email }}</a>
+                            </li>
+                        {% else %}
+                             <li class="nav-item dropdown">
+                                <a href="{% url 'accounts:employer-profile-update' %}" class="btn navbar-btn btn-outline-light mb-5 mb-lg-0">{{ request.user.email }}</a>
+                            </li>
+                        {% endif %}
+
                         <li class="nav-item dropdown">
                             <a href="{% url 'accounts:logout' %}" class="btn navbar-btn btn-outline-light mb-5 mb-lg-0">Logout</a>
                         </li>

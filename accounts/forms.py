@@ -5,7 +5,10 @@ from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 
-from accounts.models import User
+from accounts.models import EmployeeProfile, EmployerProfile
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 ROLE_CHOICES = (
     ('employee', 'Employee'),
@@ -90,3 +93,48 @@ class UserLoginForm(forms.Form):
 
     def get_user(self):
         return self.user
+
+
+class EmployeeEditProfile(forms.ModelForm):
+
+    def __int__(self, *args, **kwargs):
+        super(EmployeeEditProfile, self).__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs.update(
+            {
+                'placeholder': 'First name'
+            }
+        )
+        self.fields['last_name'].widget.attrs.update(
+            {
+                'placeholder': 'Last name'
+            }
+        )
+        self.fields['years_of_experience'].widget.attrs.update(
+            {
+                'placeholder': 'Years of exp'
+            }
+        )
+
+    class Meta:
+        model = EmployeeProfile
+        fields = ['first_name', 'last_name', 'years_of_experience', 'profile_image', 'gender']
+
+
+class EmployerEditProfile(forms.ModelForm):
+
+    def __int__(self, *args, **kwargs):
+        super(EmployerEditProfile, self).__init__(*args, **kwargs)
+        self.fields['company_name'].widget.attrs.update(
+            {
+                'placeholder': 'First name'
+            }
+        )
+        self.fields['address'].widget.attrs.update(
+            {
+                'placeholder': 'Address'
+            }
+        )
+
+    class Meta:
+        model = EmployerProfile
+        fields = ['company_name', 'address']
