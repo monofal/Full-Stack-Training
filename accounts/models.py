@@ -2,7 +2,6 @@
 Account models
 """
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 from django.contrib.auth.models import UserManager
@@ -51,8 +50,7 @@ class EmployeeProfile(models.Model):
     )
     years_of_experience = models.FloatField(
         blank=True,
-        default=0.00,
-        validators=[MinValueValidator(0.00), MaxValueValidator(4.00)]
+        default=0.00
     )
     profile_image = models.ImageField(
         upload_to='img',
