@@ -1,12 +1,15 @@
 """
 Account forms
 """
+from bootstrap_modal_forms.forms import BSModalForm
+from bootstrap_modal_forms.mixins import CreateUpdateAjaxMixin
 from django import forms
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from django_select2.forms import Select2MultipleWidget
 
-from accounts.models import EmployeeProfile, EmployerProfile
-from django.contrib.auth import get_user_model
+from accounts.models import (Document, EmployeeProfile, EmployerProfile,
+                             Qualification)
 
 User = get_user_model()
 
@@ -96,7 +99,9 @@ class UserLoginForm(forms.Form):
 
 
 class EmployeeEditProfile(forms.ModelForm):
-
+    """
+    Employee edit profile form
+    """
     def __int__(self, *args, **kwargs):
         super(EmployeeEditProfile, self).__init__(*args, **kwargs)
         self.fields['first_name'].widget.attrs.update(
@@ -114,19 +119,29 @@ class EmployeeEditProfile(forms.ModelForm):
                 'placeholder': 'Years of exp'
             }
         )
+        self.fields['profile_image'].widget.attrs.update(
+            {
+                'placeholder': 'Upload new profile image'
+            }
+        )
 
     class Meta:
         model = EmployeeProfile
-        fields = ['first_name', 'last_name', 'years_of_experience', 'profile_image', 'gender']
+        widgets = {
+            'skills': Select2MultipleWidget
+        }
+        fields = ['profile_image', 'first_name', 'last_name', 'years_of_experience', 'gender', 'skills']
 
 
 class EmployerEditProfile(forms.ModelForm):
-
+    """
+    Employee edit profile form
+    """
     def __int__(self, *args, **kwargs):
         super(EmployerEditProfile, self).__init__(*args, **kwargs)
         self.fields['company_name'].widget.attrs.update(
             {
-                'placeholder': 'First name'
+                'placeholder': 'Company name'
             }
         )
         self.fields['address'].widget.attrs.update(
@@ -138,3 +153,55 @@ class EmployerEditProfile(forms.ModelForm):
     class Meta:
         model = EmployerProfile
         fields = ['company_name', 'address']
+
+
+class QualificationForm(BSModalForm):
+    """
+    Employee qualification/degree form
+    """
+    class Meta:
+        model = Qualification
+        widgets = {
+            'institute': forms.TextInput(attrs={'class': 'form-control'}),
+            'degree': forms.TextInput(attrs={'class': 'form-control'}),
+            'start_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'end_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'percentage_marks': forms.TextInput(attrs={'class': 'form-control'}),
+            'cgpa': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        fields = ['institute', 'degree', 'start_date', 'end_date', 'percentage_marks', 'cgpa']
+
+    def save(self, commit=False):
+
+        if not self.request.is_ajax():
+            qualification = super(CreateUpdateAjaxMixin, self).save(commit=commit)
+            qualification.employee_profile_id = EmployeeProfile.objects.get(user_id=self.request.user.pk).id
+            qualification.save()
+        else:
+            qualification = super(CreateUpdateAjaxMixin, self).save(commit=False)
+
+        return qualification
+
+
+class DocumentForm(BSModalForm):
+    """
+    Employee document form
+    """
+    class Meta:
+        model = Document
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+        fields = ['name', 'description', 'document_file']
+
+    def save(self, commit=False):
+
+        if not self.request.is_ajax():
+            document = super(CreateUpdateAjaxMixin, self).save(commit=commit)
+            document.employee_profile_id = EmployeeProfile.objects.get(user_id=self.request.user.pk).id
+            document.save()
+        else:
+            document = super(CreateUpdateAjaxMixin, self).save(commit=False)
+
+        return document

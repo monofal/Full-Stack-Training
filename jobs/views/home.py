@@ -1,14 +1,18 @@
-from django.http import Http404
-from django.views.generic import ListView, DetailView
+from django.contrib.auth.decorators import login_required
+from django.http import Http404, HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.generic import CreateView, DetailView, ListView
 
-from .models import Jobs
+from jobs.models import Job, JobApplication
 
 
+@method_decorator(login_required(login_url=reverse_lazy('accounts:login')), name='dispatch')
 class HomeView(ListView):
     """
     Home page for jobs
     """
-    model = Jobs
+    model = Job
     template_name = 'jobs/home.html'
     context_object_name = 'jobs'
     paginate_by = 6
@@ -18,11 +22,12 @@ class HomeView(ListView):
         return self.model.objects.all().order_by("-entry_timestamp")[:20]
 
 
+@method_decorator(login_required(login_url=reverse_lazy('accounts:login')), name='dispatch')
 class SearchView(ListView):
     """
     Provide user the ability to search jobs
     """
-    model = Jobs
+    model = Job
     template_name = 'jobs/home.html'
     context_object_name = 'jobs'
     paginate_by = 6
@@ -43,14 +48,23 @@ class SearchView(ListView):
                                          position__icontains=self.request.GET['position']).order_by("-entry_timestamp")
 
 
+@method_decorator(login_required(login_url=reverse_lazy('accounts:login')), name='dispatch')
 class JobDetailsView(DetailView):
     """
     Get job details by id.
     """
-    model = Jobs
-    template_name = 'jobs/details.html'
+    model = Job
+    template_name = 'jobs/job_detail.html'
     context_object_name = 'job'
     pk_url_kwarg = 'id'
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(self.request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(JobDetailsView, self).get_context_data(**kwargs)
+        context['application'] = JobApplication.objects.filter(job=self.object, user=self.request.user).first()
+        return context
 
     def get_object(self, queryset=None):
         obj = super(JobDetailsView, self).get_object(queryset=queryset)

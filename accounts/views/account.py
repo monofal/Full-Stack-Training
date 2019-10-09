@@ -1,13 +1,13 @@
 from django.contrib import auth
 from django.contrib.auth import login
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import CreateView, FormView, RedirectView
-from django.contrib.sites.shortcuts import get_current_site
 
 from accounts.forms import RegistrationForm, UserLoginForm
 from accounts.models import User

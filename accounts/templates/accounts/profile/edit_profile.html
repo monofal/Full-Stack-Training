@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+  <link rel="stylesheet"
+        href="{% static 'accounts/css/custom.css' %}">
+
+  <div class="col-lg-6 offset-3">
+    <div class="box">
+
+      <div class="container mt-3">
+        <br>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#edit-profile">Edit Profile</a>
+          </li>
+          {% if request.user.role == 'employee' %}
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#qualification">Qualification</a>
+            </li>
+          {% endif %}
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div id="edit-profile" class="container tab-pane active"><br>
+            {% if form.errors %}
+              {% for field in form %}
+                {% for error in field.errors %}
+                  <div class="alert alert-danger alert-dismissable">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>{{ error|escape }}</strong>
+                  </div>
+                {% endfor %}
+              {% endfor %}
+              {% for error in form.non_field_errors %}
+                <div class="alert alert-danger alert-dismissable">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <strong>{{ error|escape }}</strong>
+                </div>
+              {% endfor %}
+            {% endif %}
+            <form action="" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              {% for field in form %}
+                {% if field.name == 'profile_image' %}
+
+                  <div class="container-img" style="position: relative;width: 185px;padding: 0 0 0 0;">
+                    <label for="id_profile_image">
+                      {% if field.value.url != '' %}
+                        <img src="{{ field.value.url }}" class="profile-image">
+                        {% else %}
+                        <img src="{% static 'img/dummy_profile.png' %}" class="profile-image">
+                      {% endif %}
+                      <div class="middle">
+                        <div class="text">Click to change</div>
+                      </div>
+                    </label>
+                  </div>
+
+                  <input type="{{ field.field.widget.input_type }}"
+                         class="form-control"
+                         name="{{ field.name }}"
+                         id="id_{{ field.name }}"
+                         value="{{ field.value }}"
+                         placeholder="{{ field.field.widget.attrs.placeholder }}"
+                         style="display: none"
+                         onchange="showImage(this);">
+
+                {% elif field.name == 'gender' %}
+
+                  <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <br>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" {% if field.value == 'male' %} checked {% endif %}
+                             type="radio" name="gender" id="male gender"
+                             value="male">
+                      <label class="form-check-label" for="male">Male</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" {% if field.value == 'female' %} checked {% endif %}
+                             type="radio" name="gender" id="female"
+                             value="female">
+                      <label class="form-check-label" for="female">Female</label>
+                    </div>
+                  </div>
+
+                {% elif field.name == 'skills' %}
+                  <div class="form-group">
+                    <label for="gender">Skills</label>
+                    <br>
+                    <div class="dropdown">{{ field }}</div>
+                  </div>
+                {% else %}
+
+                  <div class="form-group">
+                    <label for="id_{{ field.name }}">{{ field.label }}</label>
+                    <input type="{{ field.field.widget.input_type }}"
+                           class="form-control"
+                           name="{{ field.name }}"
+                           id="id_{{ field.name }}"
+                           value="{{ field.value }}"
+                           placeholder="{{ field.field.widget.attrs.placeholder }}">
+                  </div>
+
+                {% endif %}
+              {% endfor %}
+
+              <div class="text-center">
+                <button type="submit" class="btn btn-outline-white-primary">
+                  <i class="fa fa-signing"></i> Update
+                </button>
+              </div>
+            </form>
+          </div>
+          <div id="qualification" class="container tab-pane fade"><br>
+            <!-- Add qualification pop up -->
+            <a class="add-qualification btn btn-primary" type="button" name="button">
+              + Add Qualification
+            </a>
+            <br>
+            <br>
+            {% for qualification in qualifications %}
+              <br>
+              {{ qualification.degree }}
+              <button type="button" class="update-qualification btn btn-sm btn-primary"
+                      data-id="{% url 'accounts:update-qualification' qualification.pk %}">
+                <span class="fa fa-pencil"></span>
+              </button>
+              <button type="button" class="delete-qualification btn btn-sm btn-danger"
+                      data-id="{% url 'accounts:delete-qualification' qualification.pk %}">
+                <span class="fa fa-trash"></span>
+              </button>
+              <br>
+            {% endfor %}
+            <br>
+            <br>
+            <!-- Add Document pop up -->
+            <a class="add-document btn btn-primary" type="button" name="button">
+              + Add Document
+            </a>
+            <br>
+            <br>
+            {% for document in documents %}
+              <br>
+              {{ document.name }}
+              <button type="button" class="update-document btn btn-sm btn-primary"
+                      data-id="{% url 'accounts:update-document' document.pk %}">
+                <span class="fa fa-pencil"></span>
+              </button>
+              <button type="button" class="delete-document btn btn-sm btn-danger"
+                      data-id="{% url 'accounts:delete-document' document.pk %}">
+                <span class="fa fa-trash"></span>
+              </button>
+              <br>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+      $(function() {
+
+          // Add Qualification
+          $(".add-qualification").modalForm({
+              formURL: "{% url 'accounts:add-qualification' %}"
+          });
+
+          // Update qualification
+          $(".update-qualification").each(function () {
+              $(this).modalForm({formURL: $(this).data('id')});
+          });
+
+          // Delete qualification
+          $(".delete-qualification").each(function () {
+              $(this).modalForm({formURL: $(this).data('id')});
+          })
+
+          // Add Document
+          $(".add-document").modalForm({
+              formURL: "{% url 'accounts:add-document' %}"
+          });
+
+          // Update document
+          $(".update-document").each(function () {
+              $(this).modalForm({formURL: $(this).data('id')});
+          });
+
+          // Delete document
+          $(".delete-document").each(function () {
+              $(this).modalForm({formURL: $(this).data('id')});
+          })
+
+      });
+
+      // Show selected image
+      function showImage(input) {
+          if (input.files && input.files[0]) {
+              var reader = new FileReader();
+
+              reader.onload = function (e) {
+                  $('.profile-image')
+                      .attr('src', e.target.result)
+                      .width(150)
+                      .height(200);
+              };
+
+              reader.readAsDataURL(input.files[0]);
+          }
+      }
+  </script>
+
+{% endblock %}

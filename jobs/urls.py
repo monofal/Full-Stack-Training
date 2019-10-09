@@ -1,5 +1,10 @@
-from django.urls import path
-from jobs.views import HomeView, SearchView, JobDetailsView
+from django.urls import include, path
+
+from jobs.views.employee import (ApplyJobView, DeleteApplicationView,
+                                 UpdateApplicationView)
+
+from .views.employer import JobCreateView
+from .views.home import HomeView, JobDetailsView, SearchView
 
 app_name = "jobs"
 
@@ -10,7 +15,15 @@ urlpatterns = [
     path('search',
          SearchView.as_view(),
          name='search'),
-    path('jobs/<int:id>',
+    path('job/<int:id>',
          JobDetailsView.as_view(),
-         name='jobs-detail'),
+         name='job-detail'),
+    path('employee/job/application/', include([
+        path('apply', ApplyJobView.as_view(), name='apply-job'),
+        path('update/<int:pk>', UpdateApplicationView.as_view(), name='update-application'),
+        path('delete/<int:pk>', DeleteApplicationView.as_view(), name='delete-application'),
+    ])),
+    path('employer/job/create',
+         JobCreateView.as_view(),
+         name='employer-create-job'),
 ]
