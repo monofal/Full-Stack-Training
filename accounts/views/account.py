@@ -1,5 +1,6 @@
 from django.contrib import auth
 from django.contrib.auth import login
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.http import HttpResponse, HttpResponseRedirect
@@ -11,7 +12,6 @@ from django.views.generic import CreateView, FormView, RedirectView
 
 from accounts.forms import RegistrationForm, UserLoginForm
 from accounts.models import User
-from accounts.tokens import account_activation_token
 
 
 class RegisterView(CreateView):
@@ -94,6 +94,7 @@ def activate(request, uidb64, token):
     :return:
     """
     try:
+        account_activation_token = PasswordResetTokenGenerator()
         uid = force_text(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
     except(TypeError, ValueError, OverflowError):
@@ -118,8 +119,9 @@ def send_verification_email(request,
     :return:
     """
     current_site = get_current_site(request)
+    account_activation_token = PasswordResetTokenGenerator()
     mail_subject = 'Confirm Your Email.'
-    message = render_to_string('accounts/confirm-email.html', {
+    message = render_to_string('accounts/confirm_email.html', {
         'user': user,
         'domain': current_site.domain,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
