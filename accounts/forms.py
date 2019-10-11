@@ -171,6 +171,13 @@ class QualificationForm(BSModalForm):
         }
         fields = ['institute', 'degree', 'start_date', 'end_date', 'percentage_marks', 'cgpa']
 
+    def clean(self):
+        start_date = self.cleaned_data.get("start_date")
+        end_date = self.cleaned_data.get("end_date")
+        if end_date < start_date:
+            msg = u"End date should be greater than start date."
+            self._errors["end_date"] = self.error_class([msg])
+
     def save(self, commit=False):
 
         if not self.request.is_ajax():
@@ -197,7 +204,7 @@ class DocumentForm(BSModalForm):
 
     def save(self, commit=False):
 
-        if not self.request.is_ajax():
+        if self.request.is_ajax():
             document = super(CreateUpdateAjaxMixin, self).save(commit=commit)
             document.employee_profile_id = EmployeeProfile.objects.get(user_id=self.request.user.pk).id
             document.save()

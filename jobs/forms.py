@@ -1,4 +1,3 @@
-from bootstrap_modal_forms.mixins import CreateUpdateAjaxMixin
 from django import forms
 
 from jobs.models import Job, JobApplication
@@ -20,6 +19,7 @@ class CreateJobForm(forms.ModelForm):
             'location': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'category': forms.TextInput(attrs={'class': 'form-control'}),
+            'type': forms.Select(attrs={'class': 'form-control'}),
             'last_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
         }
         fields = ('company_name', 'position', 'location', 'description', 'category', 'type', 'last_date',)
@@ -34,24 +34,6 @@ class CreateJobForm(forms.ModelForm):
 
 class ApplyJobForm(forms.ModelForm):
 
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
-        super(ApplyJobForm, self).__init__(*args, **kwargs)
-
     class Meta:
         model = JobApplication
         fields = ('cover_letter',)
-
-    def __str__(self):
-        return self.job.position
-
-    def save(self, commit=False):
-
-        if not self.request.is_ajax():
-            application = super(CreateUpdateAjaxMixin, self).save(commit=commit)
-            application.user = self.request.user
-            application.save()
-        else:
-            application = super(CreateUpdateAjaxMixin, self).save(commit=False)
-
-        return application

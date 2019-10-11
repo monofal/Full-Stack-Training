@@ -3,6 +3,7 @@ from bootstrap_modal_forms.generic import (BSModalCreateView,
                                            BSModalUpdateView)
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import Http404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -17,7 +18,7 @@ from jobs.decorators import is_employee, is_employer
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:login')), name='dispatch')
 @method_decorator(is_employee, name='dispatch')
-class UpdateEmployeeProfileView(UpdateView):
+class UpdateEmployeeProfileView(SuccessMessageMixin, UpdateView):
     """
     Update employee/jobseeker profile info
     """
@@ -25,6 +26,7 @@ class UpdateEmployeeProfileView(UpdateView):
     form_class = EmployeeEditProfile
     context_object_name = 'employee'
     template_name = 'accounts/profile/edit_profile.html'
+    success_message = 'Success: Profile information updated.'
     success_url = reverse_lazy('accounts:employee-profile-update')
 
     def get_context_data(self, **kwargs):
@@ -49,7 +51,7 @@ class UpdateEmployeeProfileView(UpdateView):
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:login')), name='dispatch')
 @method_decorator(is_employer, name='dispatch')
-class UpdateEmployerProfileView(UpdateView):
+class UpdateEmployerProfileView(SuccessMessageMixin, UpdateView):
     """
     Update employer/company profile info
     """
@@ -57,6 +59,7 @@ class UpdateEmployerProfileView(UpdateView):
     form_class = EmployerEditProfile
     context_object_name = 'employer'
     template_name = 'accounts/profile/edit_profile.html'
+    success_message = 'Success: Profile information updated.'
     success_url = reverse_lazy('accounts:employer-profile-update')
 
     def get(self, request, *args, **kwargs):

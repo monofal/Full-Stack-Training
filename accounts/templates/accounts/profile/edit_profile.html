@@ -52,7 +52,7 @@
                     <label for="id_profile_image">
                       {% if field.value.url != '' %}
                         <img src="{{ field.value.url }}" class="profile-image">
-                        {% else %}
+                      {% else %}
                         <img src="{% static 'img/dummy_profile.png' %}" class="profile-image">
                       {% endif %}
                       <div class="middle">
@@ -118,50 +118,81 @@
             </form>
           </div>
           <div id="qualification" class="container tab-pane fade"><br>
-            <!-- Add qualification pop up -->
-            <a class="add-qualification btn btn-primary" type="button" name="button">
-              + Add Qualification
-            </a>
-            <br>
-            <br>
-            {% for qualification in qualifications %}
-              <br>
-              {{ qualification.degree }}
-              <button type="button" class="update-qualification btn btn-sm btn-primary"
-                      data-id="{% url 'accounts:update-qualification' qualification.pk %}">
-                <span class="fa fa-pencil"></span>
-              </button>
-              <button type="button" class="delete-qualification btn btn-sm btn-danger"
-                      data-id="{% url 'accounts:delete-qualification' qualification.pk %}">
-                <span class="fa fa-trash"></span>
-              </button>
-              <br>
-            {% endfor %}
-            <br>
-            <br>
+            <div class="col-lg-12">
+              <!-- Add qualification pop up -->
+              <a class="add-qualification btn btn-outline-white-primary btn-employee-profile" type="button" name="button">
+                <i class="fa fa-plus"></i>Add Qualification
+              </a>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover table-client-dashboard">
+                  <thead>
+                  <tr>
+                    <th>Degree</th>
+                    <th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for qualification in qualifications %}
+                    <tr>
+                      <td>{{ qualification.degree }}</td>
+                      <td>
+                        <button type="button" class="update-qualification btn btn-sm btn-primary"
+                                data-id="{% url 'accounts:update-qualification' qualification.pk %}">
+                          <span class="fa fa-pencil"></span>
+                        </button>
+                      </td>
+                      <td>
+                        <button type="button" class="delete-qualification btn btn-sm btn-danger"
+                                data-id="{% url 'accounts:delete-qualification' qualification.pk %}">
+                          <span class="fa fa-trash"></span>
+                        </button>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
             <!-- Add Document pop up -->
-            <a class="add-document btn btn-primary" type="button" name="button">
-              + Add Document
-            </a>
-            <br>
-            <br>
-            {% for document in documents %}
-              <br>
-              {{ document.name }}
-              <button type="button" class="update-document btn btn-sm btn-primary"
-                      data-id="{% url 'accounts:update-document' document.pk %}">
-                <span class="fa fa-pencil"></span>
-              </button>
-              <button type="button" class="delete-document btn btn-sm btn-danger"
-                      data-id="{% url 'accounts:delete-document' document.pk %}">
-                <span class="fa fa-trash"></span>
-              </button>
-              <br>
-            {% endfor %}
+            <div class="col-lg-12">
+              <a class="add-document btn btn-outline-white-primary btn-employee-profile" type="button" name="button">
+                <i class="fa fa-plus"></i>Add Document
+              </a>
+
+              <div class="table-responsive">
+                <table class="table table-striped table-hover table-client-dashboard">
+                  <thead>
+                  <tr>
+                    <th>Document</th>
+                    <th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for document in documents %}
+                    <tr>
+                      <td>{{ document.name }}</td>
+                      <td><button type="button" class="update-document btn btn-sm btn-primary"
+                                  data-id="{% url 'accounts:update-document' document.pk %}">
+                        <span class="fa fa-pencil"></span>
+                      </button>
+                      </td>
+                      <td>
+                        <button type="button" class="delete-document btn btn-sm btn-danger"
+                                data-id="{% url 'accounts:delete-document' document.pk %}">
+                          <span class="fa fa-trash"></span>
+                        </button>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
   </div>
 
   <script type="text/javascript">

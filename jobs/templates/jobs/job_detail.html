@@ -27,48 +27,38 @@
             <p>{{ job.description }}</p>
           </blockquote>
           <div class="job-detail__apply-bottom">
-            <!-- Job application code here -->
-{#            {% if request.user.is_authenticated and request.user.role == 'employee' %}#}
-{#              {% if application != None %}#}
-{#                <input type="button" class="btn btn-outline-white-primary" value="Already applied"/>#}
-{#                <button type="button" class="update-application btn btn-sm btn-primary"#}
-{#                      data-id="{% url 'jobs:update-application' application.pk %}">#}
-{#                <span class="fa fa-pencil"></span>#}
-{#                </button>#}
-{#                <button type="button" class="withdraw-application btn btn-sm btn-danger"#}
-{#                        data-id="{% url 'jobs:delete-application' application.pk %}">#}
-{#                  <span class="fa fa-trash"></span>#}
-{#                </button>#}
-{#              {% else %}#}
-{#                <input class="apply-job btn btn-primary"#}
-{#                       type="button" name="button"#}
-{#                       value="Apply for this job"/>#}
-{#              {% endif %}#}
-{#            {% endif %}#}
+            {% if request.user.is_authenticated and request.user.role == 'employee' %}
+              <!-- If already applied then show withdraw application button
+              else allow user to apply for job-->
+              {% if application != None %}
+                <form action="{% url 'jobs:withdraw-application' application.id %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="job_id" value="{{ job.id }}">
+                  <input type="submit" class="btn btn-outline-white-primary"
+                         value="Withdraw application"/>
+                </form>
+              {% else %}
+                <!-- Apply for this job -->
+                <a class="btn btn-primary" data-toggle="collapse" href="#job-application-tab" role="button" aria-expanded="false" aria-controls="job-application-tab">
+                  Apply
+                </a>
+                <div class="collapse" id="job-application-tab">
+                  <div class="card card-body">
+                    <form action="{% url 'jobs:apply-job' job.id %}" method="post" class="job-apply-form">
+                      {% csrf_token %}
+                      <input type="hidden" name="job_id" value="{{ job.id }}">
+                      <textarea name="cover_letter" class="form-control" placeholder="Cover letter.."></textarea>
+                      <input type="submit" class="btn btn-job-app btn-outline-white-primary"
+                             value="Apply for this job"/>
+                    </form>
+                  </div>
+                </div>
+              {% endif %}
+            {% endif %}
           </div>
         </div>
       </div>
     </div>
   </section>
-
-
-  <script type="text/javascript">
-      $(function() {
-          // Apply for job
-          $(".apply-job").modalForm({
-              formURL: "{% url 'jobs:apply-job' %}"
-          });
-
-          // Update application
-          $(".update-application").each(function () {
-              $(this).modalForm({formURL: $(this).data('id')});
-          });
-
-          // Withdraw qualification
-          $(".withdraw-application").each(function () {
-              $(this).modalForm({formURL: $(this).data('id')});
-          })
-      });
-  </script>
 
 {% endblock %}

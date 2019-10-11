@@ -1,6 +1,7 @@
 from django.contrib import auth
 from django.contrib.auth import login
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.http import HttpResponse, HttpResponseRedirect
@@ -14,18 +15,15 @@ from accounts.forms import RegistrationForm, UserLoginForm
 from accounts.models import User
 
 
-class RegisterView(CreateView):
+class RegisterView(SuccessMessageMixin, CreateView):
     """
     Registration view
     """
-    success_url = '/'
     model = User
     form_class = RegistrationForm
     template_name = 'accounts/register.html'
-
-    extra_context = {
-        'title': 'Register'
-    }
+    success_url = '/'
+    success_message = 'Success: An email has been sent on your email address for verification.'
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
@@ -52,17 +50,14 @@ class RegisterView(CreateView):
             return render(request, 'accounts/register.html', {'form': form})
 
 
-class LoginView(FormView):
+class LoginView(SuccessMessageMixin, FormView):
     """
     Provide the ability to login as a user with an email and password
     """
-    success_url = '/'
     form_class = UserLoginForm
     template_name = 'accounts/login.html'
-
-    extra_context = {
-        'title': 'Login'
-    }
+    success_message = 'Success: You are logged in.'
+    success_url = '/'
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
@@ -74,10 +69,11 @@ class LoginView(FormView):
         return HttpResponseRedirect(self.success_url)
 
 
-class LogoutView(RedirectView):
+class LogoutView(SuccessMessageMixin, RedirectView):
     """
     Provides users the ability to logout
     """
+    success_message = 'Success: You are logged out.'
     success_url = '/login'
 
     def get(self, request, *args, **kwargs):
@@ -103,7 +99,7 @@ def activate(request, uidb64, token):
         user.is_email_confirmed = True
         user.save()
         login(request, user)
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        return HttpResponse('Thank you for your email confirmation.')
     else:
         return HttpResponse('Activation link is invalid!')
 

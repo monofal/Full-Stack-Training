@@ -1,3 +1,19 @@
 .companylogo {
     width: 100px;
 }
+
+.btn-job-app{
+    margin-top: 10px;
+}
+
+.btn-all-applications{
+    float: left;
+}
+
+.btn-employee-profile{
+    float: right;
+}
+
+.text-center{
+    text-align: center;
+}

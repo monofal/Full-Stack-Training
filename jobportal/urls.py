@@ -24,4 +24,7 @@ urlpatterns = [
     path('',
          include('jobs.urls')),
     path('^searchableselect/', include('searchableselect.urls')),
+    path('api/', include([
+        path('', include('jobs.api.urls')),
+    ])),
 ]

@@ -1,9 +1,9 @@
-from bootstrap_modal_forms.generic import (BSModalCreateView,
-                                           BSModalDeleteView,
-                                           BSModalUpdateView)
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.views.generic import CreateView, DeleteView
 
 from jobs.decorators import is_employee
 from jobs.forms import ApplyJobForm
@@ -12,36 +12,55 @@ from jobs.models import JobApplication
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:login')), name='dispatch')
 @method_decorator(is_employee, name='dispatch')
-class ApplyJobView(BSModalCreateView):
-    """
-    Provide employee ability to apply for a job
-    """
-    template_name = 'jobs/employee/apply_job.html'
-    form_class = ApplyJobForm
-    success_message = 'You have successfully applied for this job'
-    success_url = reverse_lazy('jobs:home')
-
-
-@method_decorator(login_required(login_url=reverse_lazy('accounts:login')), name='dispatch')
-@method_decorator(is_employee, name='dispatch')
-class UpdateApplicationView(BSModalUpdateView):
-    """
-    Provide employee ability to update job application
-    """
+class ApplyJobView(CreateView):
     model = JobApplication
-    template_name = 'jobs/employee/update_application.html'
     form_class = ApplyJobForm
-    success_message = 'Success: Application terms updated.'
-    success_url = reverse_lazy('jobs:home')
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Show error message if user hasn't confirmed his email
+        """
+        if not self.request.user.is_email_confirmed:
+            messages.error(self.request, 'Error: Please confirm your email to apply for this job')
+            return HttpResponseRedirect(reverse_lazy('jobs:job-detail', kwargs={'id': self.kwargs['id']}))
+        else:
+            return super().dispatch(self.request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            messages.info(self.request, 'Success: Successfully applied for the job!')
+            return self.form_valid(form)
+        else:
+            return HttpResponseRedirect(reverse_lazy('jobs:home'))
+
+    def get_success_url(self):
+        return reverse_lazy('jobs:job-detail', kwargs={'id': self.kwargs['id']})
+
+    def form_valid(self, form):
+        # save applicant
+        form.instance.user = self.request.user
+        form.instance.job_id = self.request.POST.get('job_id', None)
+        form.save()
+        return super().form_valid(form)
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:login')), name='dispatch')
 @method_decorator(is_employee, name='dispatch')
-class DeleteApplicationView(BSModalDeleteView):
+class WithdrawApplication(DeleteView):
     """
     Provide employee ability to withdraw job application
     """
     model = JobApplication
-    template_name = 'jobs/employee/withdraw_application.html'
-    success_message = 'Success: Application withdrawn.'
-    success_url = reverse_lazy('jobs:home')
+    slug_field = 'id'
+    slug_url_kwarg = 'id'
+
+    def get_success_url(self):
+        messages.info(self.request, 'Success : Application successfully withdrawn')
+        return reverse_lazy('jobs:job-detail', kwargs={'id': self.request.POST.get('job_id', None)})
+
+    def form_valid(self, form):
+        # save applicant
+        form.instance.job_id = self.request.POST.get('job_id', None)
+        form.save()
+        return super().form_valid(form)

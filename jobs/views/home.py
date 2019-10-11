@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import DetailView, ListView
 
 from jobs.models import Job, JobApplication
 
@@ -43,9 +43,11 @@ class SearchView(ListView):
         return context
 
     def get_queryset(self):
-        return self.model.objects.filter(company_name__icontains=self.request.GET['company_name'],
-                                         location__icontains=self.request.GET['location'],
-                                         position__icontains=self.request.GET['position']).order_by("-entry_timestamp")
+        return self.model.objects.filter(
+            company_name__icontains=self.request.GET['company_name'],
+            location__icontains=self.request.GET['location'],
+            position__icontains=self.request.GET['position'])\
+            .order_by("-entry_timestamp")
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:login')), name='dispatch')
@@ -63,7 +65,8 @@ class JobDetailsView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(JobDetailsView, self).get_context_data(**kwargs)
-        context['application'] = JobApplication.objects.filter(job=self.object, user=self.request.user).first()
+        context['application'] = JobApplication.objects.filter(job=self.object,
+                                                               user=self.request.user).first()
         return context
 
     def get_object(self, queryset=None):
