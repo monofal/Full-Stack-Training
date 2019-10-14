@@ -6,10 +6,8 @@
 
   <link rel="stylesheet"
         href="{% static 'accounts/css/custom.css' %}">
-
   <div class="col-lg-6 offset-3">
     <div class="box">
-
       <div class="container mt-3">
         <br>
         <!-- Nav tabs -->
@@ -23,7 +21,6 @@
             </li>
           {% endif %}
         </ul>
-
         <!-- Tab panes -->
         <div class="tab-content">
           <div id="edit-profile" class="container tab-pane active"><br>
@@ -31,7 +28,8 @@
               {% for field in form %}
                 {% for error in field.errors %}
                   <div class="alert alert-danger alert-dismissable">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">
+                      &times;</a>
                     <strong>{{ error|escape }}</strong>
                   </div>
                 {% endfor %}
@@ -46,9 +44,10 @@
             <form action="" method="post" enctype="multipart/form-data">
               {% csrf_token %}
               {% for field in form %}
-                {% if field.name == 'profile_image' %}
 
-                  <div class="container-img" style="position: relative;width: 185px;padding: 0 0 0 0;">
+                {% if field.name == 'profile_image' %}
+                  <div class="container-img"
+                       style="position: relative;width: 185px;padding: 0 0 0 0;">
                     <label for="id_profile_image">
                       {% if field.value.url != '' %}
                         <img src="{{ field.value.url }}" class="profile-image">
@@ -60,7 +59,6 @@
                       </div>
                     </label>
                   </div>
-
                   <input type="{{ field.field.widget.input_type }}"
                          class="form-control"
                          name="{{ field.name }}"
@@ -71,7 +69,6 @@
                          onchange="showImage(this);">
 
                 {% elif field.name == 'gender' %}
-
                   <div class="form-group">
                     <label for="gender">Gender</label>
                     <br>
@@ -106,10 +103,8 @@
                            value="{{ field.value }}"
                            placeholder="{{ field.field.widget.attrs.placeholder }}">
                   </div>
-
                 {% endif %}
               {% endfor %}
-
               <div class="text-center">
                 <button type="submit" class="btn btn-outline-white-primary">
                   <i class="fa fa-signing"></i> Update
@@ -138,13 +133,15 @@
                     <tr>
                       <td>{{ qualification.degree }}</td>
                       <td>
-                        <button type="button" class="update-qualification btn btn-sm btn-primary"
+                        <button type="button"
+                                class="update-qualification btn btn-sm btn-primary"
                                 data-id="{% url 'accounts:update-qualification' qualification.pk %}">
                           <span class="fa fa-pencil"></span>
                         </button>
                       </td>
                       <td>
-                        <button type="button" class="delete-qualification btn btn-sm btn-danger"
+                        <button type="button"
+                                class="delete-qualification btn btn-sm btn-danger"
                                 data-id="{% url 'accounts:delete-qualification' qualification.pk %}">
                           <span class="fa fa-trash"></span>
                         </button>
@@ -163,7 +160,6 @@
                  type="button" name="button">
                 <i class="fa fa-plus"></i>Add Document
               </a>
-
               <div class="table-responsive">
                 <table class="table table-striped table-hover table-client-dashboard">
                   <thead>
@@ -176,7 +172,8 @@
                   {% for document in documents %}
                     <tr>
                       <td>{{ document.name }}</td>
-                      <td><button type="button" class="update-document btn btn-sm btn-primary"
+                      <td>
+                        <button type="button" class="update-document btn btn-sm btn-primary"
                                   data-id="{% url 'accounts:update-document' document.pk %}">
                         <span class="fa fa-pencil"></span>
                       </button>
@@ -194,7 +191,6 @@
               </div>
             </div>
             <!-- Document pop end -->
-
           </div>
         </div>
       </div>

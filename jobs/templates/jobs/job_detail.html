@@ -31,7 +31,8 @@
               <!-- If already applied then show withdraw application button
               else allow user to apply for job-->
               {% if application != None %}
-                <form action="{% url 'jobs:withdraw-application' application.id %}" method="post">
+                <form action="{% url 'jobs:withdraw-application' application.id %}"
+                      method="post">
                   {% csrf_token %}
                   <input type="hidden" name="job_id" value="{{ job.id }}">
                   <input type="submit" class="btn btn-outline-white-primary"
@@ -45,7 +46,8 @@
                 </a>
                 <div class="collapse" id="job-application-tab">
                   <div class="card card-body">
-                    <form action="{% url 'jobs:apply-job' job.id %}" method="post" class="job-apply-form">
+                    <form action="{% url 'jobs:apply-job' job.id %}" method="post"
+                          class="job-apply-form">
                       {% csrf_token %}
                       <input type="hidden" name="job_id" value="{{ job.id }}">
                       <textarea name="cover_letter" class="form-control"
