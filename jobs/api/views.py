@@ -1,3 +1,5 @@
+from datetime import date
+
 from rest_framework import viewsets
 from rest_framework.decorators import permission_classes
 from rest_framework.generics import ListAPIView
@@ -20,6 +22,7 @@ class SearchApiView(ListAPIView):
 
     def get_queryset(self):
         return self.serializer_class.Meta.model.objects.filter(
+            last_date__gte=date.today(),
             company_name__icontains=self.request.query_params.get('company_name', ''),
             location__icontains=self.request.query_params.get('location', ''),
             position__icontains=self.request.query_params.get('position', '')).order_by("-entry_timestamp")

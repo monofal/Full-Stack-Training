@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.urls import reverse_lazy
@@ -18,8 +20,8 @@ class HomeView(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        # get top 20 recently posted jobs
-        return self.model.objects.all().order_by("-entry_timestamp")[:20]
+        # get active top 20 recently posted jobs
+        return self.model.objects.filter(last_date__gte=date.today()).order_by("-entry_timestamp")[:20]
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:login')), name='dispatch')
@@ -43,7 +45,12 @@ class SearchView(ListView):
         return context
 
     def get_queryset(self):
+        """
+        Get list of active jobs that matches the query
+        :return: list of jobs
+        """
         return self.model.objects.filter(
+            last_date__gte=date.today(),
             company_name__icontains=self.request.GET['company_name'],
             location__icontains=self.request.GET['location'],
             position__icontains=self.request.GET['position'])\
