@@ -39,7 +39,8 @@
                 </form>
               {% else %}
                 <!-- Apply for this job -->
-                <a class="btn btn-primary" data-toggle="collapse" href="#job-application-tab" role="button" aria-expanded="false" aria-controls="job-application-tab">
+                <a class="btn btn-primary" data-toggle="collapse" href="#job-application-tab"
+                   role="button" aria-expanded="false" aria-controls="job-application-tab">
                   Apply
                 </a>
                 <div class="collapse" id="job-application-tab">
@@ -47,7 +48,9 @@
                     <form action="{% url 'jobs:apply-job' job.id %}" method="post" class="job-apply-form">
                       {% csrf_token %}
                       <input type="hidden" name="job_id" value="{{ job.id }}">
-                      <textarea name="cover_letter" class="form-control" placeholder="Cover letter.."></textarea>
+                      <textarea name="cover_letter" class="form-control"
+                                placeholder="Cover letter..">
+                      </textarea>
                       <input type="submit" class="btn btn-job-app btn-outline-white-primary"
                              value="Apply for this job"/>
                     </form>

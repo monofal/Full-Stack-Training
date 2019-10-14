@@ -47,11 +47,6 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['email', 'password1', 'password2', 'role']
-        error_messages = {
-            'role': {
-                'required': 'Role is required'
-            }
-        }
 
     def save(self,
              commit=True):

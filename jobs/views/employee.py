@@ -21,8 +21,10 @@ class ApplyJobView(CreateView):
         Show error message if user hasn't confirmed his email
         """
         if not self.request.user.is_email_confirmed:
-            messages.error(self.request, 'Error: Please confirm your email to apply for this job')
-            return HttpResponseRedirect(reverse_lazy('jobs:job-detail', kwargs={'id': self.kwargs['id']}))
+            messages.error(self.request,
+                           'Error: Please confirm your email to apply for this job')
+            return HttpResponseRedirect(reverse_lazy('jobs:job-detail',
+                                                     kwargs={'id': self.kwargs['id']}))
         else:
             return super().dispatch(self.request, *args, **kwargs)
 
@@ -57,7 +59,8 @@ class WithdrawApplication(DeleteView):
 
     def get_success_url(self):
         messages.info(self.request, 'Success : Application successfully withdrawn')
-        return reverse_lazy('jobs:job-detail', kwargs={'id': self.request.POST.get('job_id', None)})
+        return reverse_lazy('jobs:job-detail',
+                            kwargs={'id': self.request.POST.get('job_id', None)})
 
     def form_valid(self, form):
         # save applicant

@@ -48,7 +48,7 @@ class EmployerApplicationsView(ListAPIView):
     def get_queryset(self):
         employer_id = self.request.user.id
         if employer_id:
-            return self.serializer_class.Meta.model.objects.filter(job__user_id=employer_id). \
+            return self.serializer_class.Meta.model.objects.filter(job__user_id=employer_id).\
                 order_by('-applied_timestamp')
 
     serializer_class = ApplicantSerializer
@@ -64,5 +64,5 @@ class EmployerJobsView(ListAPIView):
     def get_queryset(self):
         employer_id = self.request.user.id
         if employer_id:
-            return self.serializer_class.Meta.model.objects.filter(user_id=employer_id). \
+            return self.serializer_class.Meta.model.objects.filter(user_id=employer_id).\
                 order_by('-entry_timestamp')

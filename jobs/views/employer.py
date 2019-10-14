@@ -20,7 +20,8 @@ class DashboardView(SuccessMessageMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return self.model.objects.filter(user_id=self.request.user.id).order_by('-entry_timestamp')
+        return self.model.objects.filter(user_id=self.request.user.id).\
+            order_by('-entry_timestamp')
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:login')), name='dispatch')
@@ -32,7 +33,8 @@ class ApplicationListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return self.model.objects.filter(job__user_id=self.request.user.id).order_by('-applied_timestamp')
+        return self.model.objects.filter(job__user_id=self.request.user.id).\
+            order_by('-applied_timestamp')
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:login')), name='dispatch')

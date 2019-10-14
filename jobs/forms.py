@@ -22,7 +22,8 @@ class CreateJobForm(forms.ModelForm):
             'type': forms.Select(attrs={'class': 'form-control'}),
             'last_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
         }
-        fields = ('company_name', 'position', 'location', 'description', 'category', 'type', 'last_date',)
+        fields = ('company_name', 'position', 'location', 'description', 'category',
+                  'type', 'last_date',)
 
     def save(self, commit=True):
         job = super(CreateJobForm, self).save(commit=False)

@@ -10,7 +10,8 @@
             <h2 class="heading">Find a <span class="accent">job</span> you will
               <span class="accent">love</span>.
             </h2>
-            <form id="job-main-form" method="get" action="{% url 'jobs:search' %}" class="job-main-form">
+            <form id="job-main-form" method="get" action="{% url 'jobs:search' %}"
+                  class="job-main-form">
               <div class="controls">
                 <div class="row align-items-center">
                   <div class="col-md-5">
@@ -63,16 +64,17 @@
                 <div class="col-2">
                 </div>
                 <div class="col-10">
-                  <h4 class="job__position"><a
-                          href="{% url 'jobs:job-detail' job.id %}">{{ job.position }}</a></h4>
+                  <h4 class="job__position">
+                    <a href="{% url 'jobs:job-detail' job.id %}">{{ job.position }}</a>
+                  </h4>
                   <p class="job__company">
                     {{ job.company_name }}
                   </p>
                 </div>
               </div>
             </div>
-            <div class="col-10 col-md-3 col-lg-2 ml-auto"><i class="fa fa-map-marker job__location"></i>
-              {{ job.location }}
+            <div class="col-10 col-md-3 col-lg-2 ml-auto">
+              <i class="fa fa-map-marker job__location"></i>{{ job.location }}
             </div>
             <div class="col-10 col-md-3 col-lg-3 ml-auto">
               <p>Posted {{ job.entry_timestamp|timesince }}</p>
@@ -83,7 +85,8 @@
       {% if is_paginated %}
         <div class="row">
           <div class="col-md-12">
-            <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-4 mb-4">
+            <nav aria-label="Page navigation example"
+                 class="d-flex justify-content-center mt-4 mb-4">
               <ul class="pagination">
                 {% if page_obj.has_previous %}
                   <li class="page-item">
@@ -104,7 +107,9 @@
                     </li>
                   {% else %}
                     <li class="page-item">
-                      <a href="/search?company_name={{company_name}}&position={{position}}&location={{location}}&page={{ i }}" class="page-link">{{ i }}</a>
+                      <a href="/search?company_name={{company_name}}&position={{position}}&location={{location}}&page={{ i }}"
+                         class="page-link">{{ i }}
+                      </a>
                     </li>
                   {% endif %}
                 {% endfor %}

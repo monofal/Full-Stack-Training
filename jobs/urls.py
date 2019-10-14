@@ -18,8 +18,10 @@ urlpatterns = [
          JobDetailsView.as_view(),
          name='job-detail'),
     path('employee/job/application/', include([
-        path('apply/<int:id>', ApplyJobView.as_view(), name='apply-job'),
-        path('withdraw/<int:id>', WithdrawApplication.as_view(), name='withdraw-application'),
+        path('apply/<int:id>',
+             ApplyJobView.as_view(), name='apply-job'),
+        path('withdraw/<int:id>', WithdrawApplication.as_view(),
+             name='withdraw-application'),
     ])),
     path('employer/dashboard',
          DashboardView.as_view(),
