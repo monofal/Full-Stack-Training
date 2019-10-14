@@ -143,8 +143,8 @@ AUTH_USER_MODEL = "accounts.user"
 # Email verification credentials
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = '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'
+EMAIL_HOST_USER = os.environ.get('API_KEY', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 EMAIL_PORT = 587
 
 # File upload settings
