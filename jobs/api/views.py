@@ -1,9 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.decorators import permission_classes
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 
 from .serializers import *
-from rest_framework.generics import ListAPIView
 
 
 class JobViewSet(viewsets.ReadOnlyModelViewSet):

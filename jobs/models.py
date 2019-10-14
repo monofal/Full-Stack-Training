@@ -43,5 +43,3 @@ class JobApplication(models.Model):
                             on_delete=models.CASCADE)
     applied_timestamp = models.DateTimeField(default=timezone.now)
     cover_letter = models.TextField()
-
-

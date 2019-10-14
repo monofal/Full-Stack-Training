@@ -1,7 +1,6 @@
 from bootstrap_modal_forms.generic import (BSModalCreateView,
                                            BSModalDeleteView,
                                            BSModalUpdateView)
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import Http404
