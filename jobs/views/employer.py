@@ -14,6 +14,9 @@ from jobs.models import Job, JobApplication
 @method_decorator(login_required(login_url=reverse_lazy('accounts:login')), name='dispatch')
 @method_decorator(is_employer, name='dispatch')
 class DashboardView(SuccessMessageMixin, ListView):
+    """
+    Employer dashboard view
+    """
     model = Job
     template_name = 'jobs/employer/dashboard.html'
     context_object_name = 'jobs'
@@ -27,6 +30,9 @@ class DashboardView(SuccessMessageMixin, ListView):
 @method_decorator(login_required(login_url=reverse_lazy('accounts:login')), name='dispatch')
 @method_decorator(is_employer, name='dispatch')
 class ApplicationListView(ListView):
+    """
+    Enlist applications submitted against job posted by a specific user
+    """
     model = JobApplication
     template_name = 'jobs/employer/applications.html'
     context_object_name = 'applications'

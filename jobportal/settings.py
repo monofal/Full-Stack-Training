@@ -146,8 +146,3 @@ EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = os.environ.get('API_KEY', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 EMAIL_PORT = 587
-
-# File upload settings
-CONTENT_TYPES = ['pdf']
-# 10MB - 10485760
-MAX_UPLOAD_SIZE = "10485760"

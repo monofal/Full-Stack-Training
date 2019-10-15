@@ -100,7 +100,7 @@
                            class="form-control"
                            name="{{ field.name }}"
                            id="id_{{ field.name }}"
-                           value="{{ field.value }}"
+                           value="{{ field.value|default_if_none:'' }}"
                            placeholder="{{ field.field.widget.attrs.placeholder }}">
                   </div>
                 {% endif %}

@@ -134,6 +134,7 @@ class EmployerEditProfile(forms.ModelForm):
     """
     def __int__(self, *args, **kwargs):
         super(EmployerEditProfile, self).__init__(*args, **kwargs)
+        self.fields['company_name'].required = True
         self.fields['company_name'].widget.attrs.update(
             {
                 'placeholder': 'Company name'
