@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
+from django.shortcuts import render, render_to_response
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView
@@ -23,7 +24,7 @@ class DashboardView(SuccessMessageMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return self.model.objects.filter(user_id=self.request.user.id).\
+        return self.model.objects.filter(user_id=self.request.user.id). \
             order_by('-entry_timestamp')
 
 
@@ -39,7 +40,7 @@ class ApplicationListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return self.model.objects.filter(job__user_id=self.request.user.id).\
+        return self.model.objects.filter(job__user_id=self.request.user.id). \
             order_by('-applied_timestamp')
 
 
@@ -68,6 +69,13 @@ class JobCreateView(SuccessMessageMixin, CreateView):
             return super().dispatch(self.request, *args, **kwargs)
 
     def form_valid(self, form):
+        # throw error if job already exists
+        if (Job.objects.filter(unique_id="{}_{}_{}".format(form.cleaned_data['company_name'],
+                                                           form.cleaned_data['position'],
+                                                           form.cleaned_data['location'])).exists()):
+            messages.error(self.request, 'Error: There is already a job posted for this position.')
+            return render(self.request, 'jobs/employer/create_job.html', {'form': form})
+
         form.instance.user = self.request.user
         return super(JobCreateView, self).form_valid(form)
 

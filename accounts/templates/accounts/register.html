@@ -37,7 +37,8 @@
                      class="form-control"
                      name="{{ field.name }}"
                      id="id_{{ field.name }}"
-                     placeholder="{{ field.field.widget.attrs.placeholder }}">
+                     placeholder="{{ field.field.widget.attrs.placeholder }}"
+                     value="{% if field.value != None %}{{ field.value }}{% endif %}">
             </div>
 
           {% endif %}

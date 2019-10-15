@@ -23,7 +23,7 @@
                    name="{{ field.name }}"
                    id="id_{{ field.name }}"
                    placeholder="{{ field.field.widget.attrs.placeholder }}"
-                   value="{% if field.value != None %} {{ field.value }} {% endif %}">
+                   value="{% if field.value != None %}{{ field.value }}{% endif %}">
             {% for error in field.errors %}
               <p><strong>{{ error|escape }}</strong></p>
             {% endfor %}
