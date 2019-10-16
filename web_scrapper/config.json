@@ -1,0 +1,11 @@
+{
+	"mysql": {
+		"host": "localhost",
+		"user": "root",
+		"password": "password",
+		"db": "testdb"
+	},
+    "log": {
+        "is_log_enabled":"True"
+    }
+}
