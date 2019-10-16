@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}
+  Job details
+{% endblock %}
+
+{% block content %}
+
+  <section class="bg-light-gray">
+    <div class="container">
+      <h1 class="heading">{{ job.position }}<br>
+        <small>at <a href="#"> {{ job.company_name }}</a></small>
+      </h1>
+      <div class="job-detail-description"><i class="fa fa-map-marker job__location"> </i>
+        {{ job.location }} | Posted {{ job.entry_timestamp|timesince }}
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8">
+          <h3>Category: {{ job.category }}</h3>
+          <h5>Last date to apply: {{ job.last_date|date }}</h5>
+          <blockquote class="blockquote">
+            <p>{{ job.description }}</p>
+          </blockquote>
+          <div class="job-detail__apply-bottom">
+            {% if request.user.is_authenticated and request.user.role == 'employee' %}
+              <!-- If already applied then show withdraw application button
+              else allow user to apply for job-->
+              {% if application != None %}
+                <form action="{% url 'jobs:withdraw-application' application.id %}"
+                      method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="job_id" value="{{ job.id }}">
+                  <input type="submit" class="btn btn-outline-white-primary"
+                         value="Withdraw application"/>
+                </form>
+              {% else %}
+                <!-- Apply for this job -->
+                <a class="btn btn-primary" data-toggle="collapse" href="#job-application-tab"
+                   role="button" aria-expanded="false" aria-controls="job-application-tab">
+                  Apply
+                </a>
+                <div class="collapse" id="job-application-tab">
+                  <div class="card card-body">
+                    <form action="{% url 'jobs:apply-job' job.id %}" method="post"
+                          class="job-apply-form">
+                      {% csrf_token %}
+                      <input type="hidden" name="job_id" value="{{ job.id }}">
+                      <textarea name="cover_letter" class="form-control"
+                                placeholder="Cover letter.."></textarea>
+                      <input type="submit" class="btn btn-job-app btn-outline-white-primary"
+                             value="Apply for this job"/>
+                    </form>
+                  </div>
+                </div>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
