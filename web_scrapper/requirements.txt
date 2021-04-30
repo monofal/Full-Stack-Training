@@ -6,4 +6,4 @@ mysql-connector==2.2.9
 mysqlclient==1.4.4
 requests==2.22.0
 soupsieve==1.9.3
-urllib3==1.25.5
+urllib3==1.25.8
